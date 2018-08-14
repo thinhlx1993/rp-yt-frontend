@@ -162,6 +162,7 @@ export class EmailComponent implements OnInit {
   clearData() {
     if (this.search.value !== '') {
       this.search.setValue('');
+      this.uploadPageIndex = 0;
       this.getData();
     }
   }
@@ -215,7 +216,7 @@ export class EmailComponent implements OnInit {
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
       <div>Quản lý email</div>
-      <button type="button" mat-icon-button (click)="close(close)" tabindex="-1">
+      <button type="button" mat-icon-button (click)="close('do nothing')" tabindex="-1">
         <mat-icon>close</mat-icon>
       </button>
     </div>
