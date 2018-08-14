@@ -1,0 +1,55 @@
+<div class="login"
+     fxLayout="row"
+     fxLayoutAlign="center center">
+    <div class="session-card">
+        <div class="header"
+             fxLayout="column"
+             fxLayoutAlign="center center">
+            <img src="assets/img/icon.png">
+        </div>
+      <form [formGroup]="form" (submit)="send()">
+        <div class="content"
+             fxLayout="column"
+             fxLayoutGap="24px">
+          <div fxFlex="grow"
+               fxLayout="column"
+               fxLayoutGap="8px">
+            <mat-form-field fxFlex="grow">
+              <mat-placeholder>Username</mat-placeholder>
+              <input matInput
+                     required
+                     formControlName="username">
+            </mat-form-field>
+            <mat-form-field fxFlex="grow">
+              <mat-placeholder>Password</mat-placeholder>
+              <input matInput
+                     [type]="inputType"
+                     formControlName="password">
+              <button *ngIf="!visible"
+                      type="button"
+                      mat-icon-button
+                      matSuffix
+                      (click)="show()">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button *ngIf="visible"
+                      type="button"
+                      mat-icon-button
+                      matSuffix
+                      (click)="hide()">
+                <mat-icon>visibility_off</mat-icon>
+              </button>
+              <mat-hint>Try clicking the eye to toggle the visibility.</mat-hint>
+            </mat-form-field>
+          </div>
+          <button type="submit"
+                  color="primary"
+                  mat-raised-button
+                  [disabled]="form.invalid"
+                  (click)="send()">
+            SIGN IN
+          </button>
+        </div>
+      </form>
+    </div>
+</div>

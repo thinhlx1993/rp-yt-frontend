@@ -1,0 +1,103 @@
+<fury-scrollbar furyPage furyPagePadding>
+  <div fxLayout="row" [fxLayoutGap]="gap">
+    <div fxFlex="70" fxFlex.md="60" fxHide.lt-md fxLayout="row" [fxLayoutGap]="gap">
+      <button mat-raised-button color="accent" (click)="createEmail()">Create new</button>
+    </div>
+    <div fxFlex="30" fxFlex.md="40" fxFlex.lt-md="100" fxLayout="row" [fxLayoutGap]="gap">
+      <div class="search-wrapper" fxFlex>
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="search"
+               autocomplete="off"
+               spellcheck="false"
+               (click)="clearData()"
+               (submit)="getData()"
+               [formControl]="search"
+               class="search-input"
+               placeholder="">
+      </div>
+      <div>
+        <label for="file" (click)="checkUploading()">
+          <mat-icon style="margin: 0.3em;" color="accent">file_upload</mat-icon>
+        </label>
+        <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [disabled]="onUploading()" id="file" style="width: 0; display: none;" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1em;" fxLayout="row" [fxLayoutGap]="gap" [fxHide]="files.length == 0">
+    <div class="table-container" furyScrollbar fxFlex="grow">
+      <table class="table" [class.table-hover]="tableHover" [class.table-striped]="tableStriped"
+             [class.table-condensed]="tableCondensed" [class.table-bordered]="tableBordered">
+        <thead>
+        <tr>
+          <th style="width: 10%;">#</th>
+          <th class="title" style="width: 40%;">Tên</th>
+          <th class="size" style="width: 10%; text-align: center;">Kích thước</th>
+          <th class="speed" style="width: 10%; text-align: center;">Tốc độ</th>
+          <th class="size" style="width: 10%; text-align: center;">Thêm thành công</th>
+          <th class="speed" style="width: 10%; text-align: center;">Thêm thất bại</th>
+          <th class="status" style="width: 10%; text-align: center;">Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of files; let i = index;">
+          <td>{{i + 1}}</td>
+          <td class="title">{{row.name}}</td>
+          <td class="size" style="text-align: center;">{{sizeCalculator(row.size)}}</td>
+          <td class="speed" style="text-align: center;">{{ speedCalculator(row.progress.data.speed)}}</td>
+          <td class="size" style="text-align: center;">{{row?.response?.data?.new_email}}</td>
+          <td class="speed" style="text-align: center;">{{ row?.response?.data?.duplicated_email}}</td>
+          <td class="status" style="text-align: center;">
+            <div *ngIf="row.responseStatus == 200">
+              <mat-icon *ngIf="(row?.response?.status) && row.progress.status == 2" color="accent" title="{{row?.response?.message}}">done</mat-icon>
+              <mat-icon *ngIf="(!row?.response?.status) && row.progress.status == 2" color="warn" title="{{row?.response?.message}}">error</mat-icon>
+            </div>
+
+            <div *ngIf="row.responseStatus != 200">
+              <mat-spinner  title="Uploading" *ngIf="row.progress.status == 1" color="accent"  [diameter]="24" style="margin: 0 auto;"></mat-spinner>
+              <mat-icon *ngIf="row.progress.status == 0" color="primary" title="Added">done</mat-icon>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top: 1em; margin-bottom: 1em;" fxLayout="row" [fxLayoutGap]="gap">
+    <div class="table-container" furyScrollbar fxFlex="grow">
+      <table class="table" [class.table-hover]="tableHover" [class.table-striped]="tableStriped"
+             [class.table-condensed]="tableCondensed" [class.table-bordered]="tableBordered">
+        <thead>
+        <tr>
+          <th style="width: 10%;">#</th>
+          <th style="width: 30%;">Email</th>
+          <th style="width: 20%; text-align: center;">Mật khẩu</th>
+          <th style="width: 20%; text-align: center;">Mail khôi phục</th>
+          <th style="width: 10%; text-align: center;">Ngày tạo</th>
+          <th style="width: 10%; text-align: center;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of rows; let i = index;">
+          <td>{{(uploadPageIndex * uploadPageSize) + (i + 1)}}</td>
+          <td>{{row.email}}</td>
+          <td class="mail-password" style="text-align: center;">{{row.password}}</td>
+          <td class="recovery-email" style="text-align: center;">{{row.recovery_email}}</td>
+          <td class="date-create" style="text-align: center;">{{row.date}}</td>
+          <td style="text-align: center;">
+            <mat-icon color="accent" style="cursor: pointer;" (click)="openEditDialog(row)">mode_edit</mat-icon>
+            <!--<mat-icon color="accent" style="cursor: pointer;">edit</mat-icon>-->
+            <mat-icon color="warn" style="cursor: pointer;" (click)="openDeleteDialog(row)">delete</mat-icon>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <mat-paginator [length]="totals"
+                     [pageSize]="uploadPageSize"
+                     [pageIndex]="uploadPageIndex"
+                     [pageSizeOptions]="[5, 10, 25, 100]"
+                     (page)="pageSizeChange($event)"></mat-paginator>
+    </div>
+  </div>
+</fury-scrollbar>
