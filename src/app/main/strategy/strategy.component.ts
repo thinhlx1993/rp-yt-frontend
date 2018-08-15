@@ -1,16 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ReportService} from './report-manage.service';
+import {StrategyService} from './strategy.service';
 import 'rxjs-compat/add/operator/debounceTime';
 
 @Component({
-  selector: 'fury-report-manage',
-  templateUrl: './report-manage.component.html',
-  styleUrls: ['./report-manage.component.scss']
+  selector: 'fury-strategy',
+  templateUrl: './strategy.component.html',
+  styleUrls: ['./strategy.component.scss']
 })
-export class ReportManageComponent implements OnInit {
-
+export class StrategyComponent implements OnInit {
   /**
    * Needed for uploader
    * @param {ManageService} manageService
@@ -35,7 +34,7 @@ export class ReportManageComponent implements OnInit {
   }
   constructor(
     private snackBar: MatSnackBar,
-    private service: ReportService,
+    private service: StrategyService,
     private dialog: MatDialog,
   ) { }
 
@@ -48,8 +47,6 @@ export class ReportManageComponent implements OnInit {
       this.getData();
     });
   }
-
-
 
   pageSizeChange(page?: PageEvent) {
     this.uploadPageIndex = page.pageIndex;
@@ -75,7 +72,7 @@ export class ReportManageComponent implements OnInit {
   }
 
   createEmail() {
-    this.dialog.open(CreateEditReportComponent, {
+    this.dialog.open(CreateEditStrategyComponent, {
       disableClose: false,
       data: {}
     }).afterClosed().subscribe(result => {
@@ -84,16 +81,16 @@ export class ReportManageComponent implements OnInit {
   }
 
   openEditDialog(row) {
-    this.dialog.open(CreateEditReportComponent, {
+    this.dialog.open(CreateEditStrategyComponent, {
       disableClose: false,
-      data: row || {}
+      data: row
     }).afterClosed().subscribe(result => {
       this.refreshData(result);
     });
   }
 
   openDeleteDialog(row) {
-    this.dialog.open(DeleteChannelComponent, {
+    this.dialog.open(DeleteStrategyComponent, {
       disableClose: false,
       data: row
     }).afterClosed().subscribe(result => {
@@ -109,12 +106,11 @@ export class ReportManageComponent implements OnInit {
   }
 }
 
-
 @Component({
   selector: 'fury-manage-email-dialog',
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
-      <div>Quản lý kênh</div>
+      <div>Quản lý chiến dịch</div>
       <button type="button" mat-icon-button (click)="close('do nothing')" tabindex="-1">
         <mat-icon>close</mat-icon>
       </button>
@@ -124,11 +120,22 @@ export class ReportManageComponent implements OnInit {
       <form [formGroup]="form" (submit)="save()">
         <div class="login-content" fxLayout="column" fxLayoutAlign="start stretch">
           <mat-form-field>
-            <input matInput type="text" placeholder="Tên kênh" formControlName="name" required>
-            <mat-hint>Ví dụ: Report Pro</mat-hint>
+            <input matInput type="text" placeholder="Tên chiến dịch" formControlName="name" required>
+            <mat-hint>Ví dụ: Chiến dịch 1</mat-hint>
           </mat-form-field>
+          <div fxLayout="row" fxLayoutGap="1em">
+            <mat-form-field>
+              <input matInput type="text" placeholder="Vấn đề gặp phải" formControlName="issue" required>
+              <mat-hint>Ví dụ: Hate Speech Against a Protected Group</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="text" placeholder="Chi tiết" formControlName="sub_issue" required>
+              <mat-hint>Ví dụ: Sexual orientation/gender identity</mat-hint>
+            </mat-form-field>
+          </div>
           <mat-form-field>
-            <input matInput type="text" placeholder="Đường dẫn" formControlName="channel" required>
+            <input matInput type="text" placeholder="Ghi chú" formControlName="note" required>
+            <mat-hint>Cái này là ghi chú cho mục Additional note</mat-hint>
           </mat-form-field>
         </div>
       </form>
@@ -142,13 +149,13 @@ export class ReportManageComponent implements OnInit {
 })
 
 
-export class CreateEditReportComponent implements OnInit {
+export class CreateEditStrategyComponent implements OnInit {
   form: FormGroup;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<CreateEditReportComponent>,
-    private service: ReportService,
+    private dialogRef: MatDialogRef<CreateEditStrategyComponent>,
+    private service: StrategyService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -156,13 +163,17 @@ export class CreateEditReportComponent implements OnInit {
     if (this.data.hasOwnProperty('name')) {
       this.form = this.fb.group({
         _id: [this.data._id],
-        channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
+        name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)]) ],
+        issue: [this.data.issue, Validators.compose([Validators.required, Validators.maxLength(200)]) ],
+        sub_issue: [this.data.sub_issue, Validators.compose([Validators.maxLength(200), Validators.required])],
+        note: [this.data.note, Validators.compose([Validators.required, Validators.maxLength(2000)])],
       });
     } else {
       this.form = this.fb.group({
-        channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
+        name: ['', Validators.compose([Validators.required, Validators.maxLength(200)]) ],
+        issue: ['', Validators.compose([Validators.required, Validators.maxLength(200)]) ],
+        sub_issue: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
+        note: ['', Validators.compose([Validators.required, Validators.maxLength(2000)])],
       });
     }
   }
@@ -204,18 +215,19 @@ export class CreateEditReportComponent implements OnInit {
   }
 }
 
+
 @Component({
   selector: 'fury-delete-strategy-dialog',
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
-      <div>Xóa kênh</div>
+      <div>Xóa chiến dịch</div>
       <button type="button" mat-icon-button (click)="close('do nothing')" tabindex="-1">
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
     <mat-dialog-content>
-      <p>Bạn có muốn xóa kênh: {{ data.name }}?</p>
+      <p>Bạn có muốn xóa chiến dịch: {{ data.name }}?</p>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
@@ -224,10 +236,10 @@ export class CreateEditReportComponent implements OnInit {
     </mat-dialog-actions>
   `
 })
-export class DeleteChannelComponent {
+export class DeleteStrategyComponent {
   constructor(
-    private dialogRef: MatDialogRef<DeleteChannelComponent>,
-    private service: ReportService,
+    private dialogRef: MatDialogRef<DeleteStrategyComponent>,
+    private service: StrategyService,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -249,4 +261,3 @@ export class DeleteChannelComponent {
     });
   }
 }
-

@@ -1,7 +1,7 @@
 <fury-scrollbar furyPage furyPagePadding>
   <div fxLayout="row" [fxLayoutGap]="gap">
     <div fxFlex="70" fxFlex.md="60" fxHide.lt-md fxLayout="row" [fxLayoutGap]="gap">
-      <button mat-raised-button color="accent" (click)="createEmail()">Create new</button>
+      <button mat-raised-button color="accent" (click)="createEmail()">Tạo mới email</button>
     </div>
     <div fxFlex="30" fxFlex.md="40" fxFlex.lt-md="100" fxLayout="row" [fxLayoutGap]="gap">
       <div class="search-wrapper" fxFlex>
@@ -13,7 +13,7 @@
                (submit)="getData()"
                [formControl]="search"
                class="search-input"
-               placeholder="">
+               placeholder="Tìm kiếm email">
       </div>
       <div>
         <label for="file" (click)="checkUploading()">

@@ -208,7 +208,8 @@ export class CreateEditUserComponent implements OnInit {
         username: [this.data.username, Validators.compose([Validators.maxLength(200), Validators.required])],
         fullname: [this.data.fullname, Validators.maxLength(200)],
         phone: [this.data.phone, Validators.maxLength(200)],
-        address: [this.data.address, Validators.maxLength(200)]
+        address: [this.data.address, Validators.maxLength(200)],
+        role: [this.data.role, Validators.required]
       });
       this.form.controls['username'].disable();
     } else {
@@ -219,7 +220,8 @@ export class CreateEditUserComponent implements OnInit {
         confirm: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
         fullname: ['', Validators.maxLength(200)],
         phone: ['', Validators.maxLength(200)],
-        address: ['', Validators.maxLength(200)]
+        address: ['', Validators.maxLength(200)],
+        role: ['', Validators.required]
       });
     }
   }

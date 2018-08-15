@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { AuthActivateGruard } from './auth-service.guard';
 import { ActivateServiceGuard } from './app-activate.guard';
+import {StrategyModule} from './main/strategy/strategy.module';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'users',
         loadChildren: 'app/main/users/users.module#UsersModule',
+      },
+      {
+        path: 'strategy',
+        loadChildren: 'app/main/strategy/strategy.module#StrategyModule',
       },
     ]
   }

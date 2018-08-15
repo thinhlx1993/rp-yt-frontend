@@ -1,13 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReportManageComponent} from './report-manage.component';
+import {CreateEditReportComponent, DeleteChannelComponent, ReportManageComponent} from './report-manage.component';
 import {ReportRoutingModule} from './report-manage-routing.module';
+import {AspectRatioModule} from '../../core/common/aspect-ratio/aspect-ratio.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MaterialModule} from '../../core/common/material-components.module';
+import {PageModule} from '../../core/common/page/page.module';
+import {EmailService} from '../email/email.service';
+import {MomentModule} from 'ngx-moment';
 
 @NgModule({
   imports: [
     CommonModule,
-    ReportRoutingModule
+    ReportRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+
+    // Core
+    PageModule,
+    AspectRatioModule,
+    MomentModule
   ],
-  declarations: [ReportManageComponent]
+  declarations: [ReportManageComponent, CreateEditReportComponent, DeleteChannelComponent],
+  entryComponents: [CreateEditReportComponent, DeleteChannelComponent],
+  providers: [EmailService]
 })
 export class ReportManageModule { }
