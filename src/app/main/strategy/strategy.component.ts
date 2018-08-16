@@ -107,7 +107,7 @@ export class StrategyComponent implements OnInit {
 }
 
 @Component({
-  selector: 'fury-manage-email-dialog',
+  selector: 'fury-manage-strategy-dialog',
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
       <div>Quản lý chiến dịch</div>
@@ -134,7 +134,7 @@ export class StrategyComponent implements OnInit {
             </mat-form-field>
           </div>
           <mat-form-field>
-            <input matInput type="text" placeholder="Ghi chú" formControlName="note" required>
+            <textarea matInput rows="4" type="text" placeholder="Ghi chú" formControlName="note" required></textarea>
             <mat-hint>Cái này là ghi chú cho mục Additional note</mat-hint>
           </mat-form-field>
         </div>

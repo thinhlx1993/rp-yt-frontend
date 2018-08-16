@@ -29,18 +29,18 @@ export class MyInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     if (localStorage.getItem('auth_token')) {
       const token = localStorage.getItem('auth_token');
-      const expDate: any = this.jwt.getTokenExpirationDate(token);
-      if ((expDate - Date.now()) < 10000 && !this.isRefreshToken) {
-        this.isRefreshToken = true;
-        // check token expired and refresh
-        const http = this.injector.get(HttpClient);
-        http.post(refreshTokenApi, {access_token: token}).subscribe((res: any) => {
-          this.isRefreshToken = false;
-          if (res.code === 200) {
-            localStorage.setItem('auth_token', res.data);
-          }
-        }, error1 => this.isRefreshToken = false);
-      }
+      // const expDate: any = this.jwt.getTokenExpirationDate(token);
+      // if ((expDate - Date.now()) < 10000 && !this.isRefreshToken) {
+      //   this.isRefreshToken = true;
+      //   // check token expired and refresh
+      //   const http = this.injector.get(HttpClient);
+      //   http.post(refreshTokenApi, {access_token: token}).subscribe((res: any) => {
+      //     this.isRefreshToken = false;
+      //     if (res.code === 200) {
+      //       localStorage.setItem('auth_token', res.data);
+      //     }
+      //   }, error1 => this.isRefreshToken = false);
+      // }
 
       if (req.url.indexOf('login') === -1) {
         req = req.clone({

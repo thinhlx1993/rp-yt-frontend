@@ -40,8 +40,8 @@
           <td class="create-date" style="text-align: center;">{{row.create_date | amFromUnix | amDateFormat: 'DD-MM-YYYY HH:mm'}}</td>
           <td class="channel-status" style="text-align: center;">{{row.status }}</td>
           <td style="text-align: center;">
-            <mat-icon color="accent" style="cursor: pointer;" (click)="openEditDialog(row)">mode_edit</mat-icon>
-            <!--<mat-icon color="accent" style="cursor: pointer;">edit</mat-icon>-->
+            <mat-icon color="accent" style="cursor: pointer;" (click)="startReport(row)">play_arrow</mat-icon>
+            <mat-icon color="primary" style="cursor: pointer;" (click)="openEditDialog(row)">mode_edit</mat-icon>
             <mat-icon color="warn" style="cursor: pointer;" (click)="openDeleteDialog(row)">delete</mat-icon>
           </td>
         </tr>

@@ -32,4 +32,8 @@ export class ReportService {
   remove(email_id): Observable<any> {
     return this.http.delete(`${channelApi}?id=${email_id}`);
   }
+
+  start(_id): Observable<any> {
+    return this.http.get(`${channelApi}/start?id=${_id}`);
+  }
 }

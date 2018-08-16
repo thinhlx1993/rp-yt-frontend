@@ -101,6 +101,11 @@ export class ReportManageComponent implements OnInit {
     });
   }
 
+  startReport(channel) {
+    this.service.start(channel._id).subscribe((res: any) => {{
+    }});
+  }
+
   refreshData(command) {
     if (command === 'refresh') {
       this.uploadPageIndex = 0;
