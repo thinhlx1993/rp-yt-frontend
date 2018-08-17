@@ -8,6 +8,8 @@ import {MaterialModule} from '../../core/common/material-components.module';
 import {PageModule} from '../../core/common/page/page.module';
 import {EmailService} from '../email/email.service';
 import {MomentModule} from 'ngx-moment';
+import {StrategyService} from '../strategy/strategy.service';
+import {ReportService} from './report-manage.service';
 
 @NgModule({
   imports: [
@@ -24,6 +26,6 @@ import {MomentModule} from 'ngx-moment';
   ],
   declarations: [ReportManageComponent, CreateEditReportComponent, DeleteChannelComponent],
   entryComponents: [CreateEditReportComponent, DeleteChannelComponent],
-  providers: [EmailService]
+  providers: [EmailService, StrategyService, ReportService]
 })
 export class ReportManageModule { }

@@ -58,7 +58,7 @@ export class LayoutComponent implements OnInit {
         menu.push({
           name: 'Chiến dịch',
           routeOrFunction: '/strategy',
-          icon: 'playlist_add',
+          icon: 'chrome_reader_mode',
           position: 5,
         });
 

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ReportService} from './report-manage.service';
 import 'rxjs-compat/add/operator/debounceTime';
+import {StrategyService} from '../strategy/strategy.service';
 
 @Component({
   selector: 'fury-report-manage',
@@ -128,10 +129,17 @@ export class ReportManageComponent implements OnInit {
     <mat-dialog-content>
       <form [formGroup]="form" (submit)="save()">
         <div class="login-content" fxLayout="column" fxLayoutAlign="start stretch">
-          <mat-form-field>
-            <input matInput type="text" placeholder="Tên kênh" formControlName="name" required>
-            <mat-hint>Ví dụ: Report Pro</mat-hint>
-          </mat-form-field>
+          <div fxLayout="row" fxLayoutGap="1em">
+            <mat-form-field>
+              <input matInput type="text" placeholder="Tên kênh" formControlName="name" required>
+              <mat-hint>Ví dụ: Report Pro</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Chiến dịch" *ngFor="let item of strategy" formControlName="strategy">
+                <mat-option [value]="item._id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
           <mat-form-field>
             <input matInput type="text" placeholder="Đường dẫn" formControlName="channel" required>
           </mat-form-field>
@@ -149,25 +157,34 @@ export class ReportManageComponent implements OnInit {
 
 export class CreateEditReportComponent implements OnInit {
   form: FormGroup;
+  strategy: any;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<CreateEditReportComponent>,
     private service: ReportService,
+    private strategyService: StrategyService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
+    this.strategyService.getAll().subscribe((res: any) => {
+      if (res.status) {
+        this.strategy = res.data;
+      }
+    });
     if (this.data.hasOwnProperty('name')) {
       this.form = this.fb.group({
         _id: [this.data._id],
         channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
         name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
+        strategy: [this.data.strategy, Validators.compose([Validators.required])],
       });
     } else {
       this.form = this.fb.group({
-        channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
+        channel: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
+        name: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
+        strategy: ['', Validators.compose([Validators.required])],
       });
     }
   }
