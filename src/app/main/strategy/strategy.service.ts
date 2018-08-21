@@ -32,4 +32,8 @@ export class StrategyService {
   remove(email_id): Observable<any> {
     return this.http.delete(`${strategysApi}?id=${email_id}`);
   }
+
+  getAll(): Observable<any> {
+    return this.http.get(`${strategysApi}/all`);
+  }
 }
