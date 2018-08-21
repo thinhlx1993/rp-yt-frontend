@@ -8,17 +8,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./toolbar-user-button.component.scss']
 })
 export class ToolbarUserButtonComponent implements OnInit {
-  user: any;
+  username: any;
   isOpen: boolean;
 
   constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit() {
-    this.loginService.userInfo().subscribe((res: any) => {
-      if (res.status) {
-        this.user = res.data;
-      }
-    });
+    this.username = localStorage.getItem('username');
   }
 
   toggleDropdown() {

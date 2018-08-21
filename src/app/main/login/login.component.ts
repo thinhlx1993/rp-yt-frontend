@@ -39,6 +39,11 @@ export class LoginComponent implements OnInit {
       if (res.status) {
         localStorage.setItem('auth_token', res.data.access_token);
         localStorage.setItem('refresh_token', res.data.refresh_token);
+        this.loginService.userInfo().subscribe((response: any) => {
+          if (response.status) {
+            localStorage.setItem('username', response.data.username);
+          }
+        });
         this.router.navigateByUrl('/email');
       }
     });

@@ -21,6 +21,6 @@ export class LoginService {
   }
 
   public userInfo(): Observable<any> {
-    return this.http.get(userInfoApi);
+    return this.http.delete(userInfoApi);
   }
 }

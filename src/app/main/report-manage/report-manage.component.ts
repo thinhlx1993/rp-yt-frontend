@@ -241,7 +241,7 @@ export class CreateEditReportComponent implements OnInit {
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-button (click)="close()">Không</button>
+      <button mat-button (click)="close('do nothing')">Không</button>
       <button mat-raised-button color="warn" (click)="deleteFile()">Đồng ý xóa</button>
     </mat-dialog-actions>
   `

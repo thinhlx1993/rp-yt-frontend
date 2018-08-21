@@ -6,21 +6,18 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import { JwtHelper } from 'angular2-jwt';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { Router } from '@angular/router';
 import {logoutApi, refreshTokenApi} from './global';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
-  jwt: JwtHelper;
   isRefreshToken: boolean;
   constructor(
     private injector: Injector,
     private snackBar: MatSnackBar,
     private http: HttpClient,
     private router: Router) {
-    this.jwt = new JwtHelper();
   }
 
   intercept(

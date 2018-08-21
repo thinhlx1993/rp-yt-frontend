@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { JwtHelper } from 'angular2-jwt';
+import { JwtHelperService  } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthActivateGruard implements CanActivate {
-  jwt: JwtHelper;
+  jwt: JwtHelperService;
   constructor(private router: Router) {
-    this.jwt = new JwtHelper();
+    this.jwt = new JwtHelperService();
   }
 
   canActivate(
