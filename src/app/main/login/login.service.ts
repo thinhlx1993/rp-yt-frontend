@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { loginApi } from '../../global';
+import { loginApi, logoutApi, userInfoApi } from '../../global';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +14,13 @@ export class LoginService {
 
   public login(data): Observable<any> {
     return this.http.post(loginApi, data);
+  }
+
+  public logout(): Observable<any> {
+    return this.http.get(logoutApi);
+  }
+
+  public userInfo(): Observable<any> {
+    return this.http.get(userInfoApi);
   }
 }

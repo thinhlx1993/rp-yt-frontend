@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from '../../../main/login/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'fury-toolbar-user-button',
@@ -6,12 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./toolbar-user-button.component.scss']
 })
 export class ToolbarUserButtonComponent implements OnInit {
-
+  user: any;
   isOpen: boolean;
 
-  constructor() { }
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit() {
+    this.loginService.userInfo().subscribe((res: any) => {
+      if (res.status) {
+        this.user = res.data;
+      }
+    });
   }
 
   toggleDropdown() {
@@ -21,5 +28,12 @@ export class ToolbarUserButtonComponent implements OnInit {
   onClickOutside() {
     this.isOpen = false;
   }
+
+  logout() {
+    this.loginService.logout().subscribe();
+    localStorage.clear();
+    this.router.navigateByUrl('/login');
+  }
+
 
 }

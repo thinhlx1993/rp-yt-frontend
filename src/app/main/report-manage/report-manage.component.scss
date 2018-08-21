@@ -135,51 +135,16 @@ input[type="search"] {
 }
 
 
-
-.paragraph {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* number of lines to show */
-  line-height: 1.5;        /* fallback */
-  max-height: 2*1.5em;       /* fallback */
-}
-
-.vuln-very-high {
-  color: #8E2800;
-}
-
-.vuln-high {
-  color: #B64926;
-}
-
-.vuln-medium {
-  color: #FFB03B;
-}
-
-.vuln-low {
-  color: #dbd339;
-}
-
-.vuln-very-low {
-  color: #468966;
-}
-
 .table-container {
   @include mat-elevation($card-elevation);
 }
 
-@media screen and(max-width: 600px) {
-  .size {
-    display: none;
-  }
 
-  .date-upload {
-    display: none;
-  }
+.lowercase {
+  text-transform: lowercase;
+}
 
-  .date-create {
-    display: none;
-  }
+
+.capitalize {
+  text-transform: capitalize;
 }
