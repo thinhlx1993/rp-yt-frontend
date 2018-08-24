@@ -11,6 +11,7 @@ import {MomentModule} from 'ngx-moment';
 import {StrategyService} from '../strategy/strategy.service';
 import {ReportService} from './report-manage.service';
 
+
 @NgModule({
   imports: [
     CommonModule,

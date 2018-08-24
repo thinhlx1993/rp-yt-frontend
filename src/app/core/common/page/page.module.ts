@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { BreadcrumbsModule } from '../../breadcrumbs/breadcrumbs.module';
 import { ScrollbarModule } from '../scrollbar/scrollbar.module';
 import { PagePaddingDirective } from './page-padding.directive';
 import { PageDirective } from './page.directive';
@@ -13,8 +12,7 @@ import { PageDirective } from './page.directive';
   exports: [
     PageDirective,
     PagePaddingDirective,
-    ScrollbarModule,
-    BreadcrumbsModule
+    ScrollbarModule
   ]
 })
 export class PageModule {

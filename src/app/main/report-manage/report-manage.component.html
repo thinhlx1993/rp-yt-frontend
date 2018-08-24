@@ -37,7 +37,7 @@
         <tr *ngFor="let row of rows; let i = index;">
           <td>{{(uploadPageIndex * uploadPageSize) + (i + 1)}}</td>
           <td>{{row.name}}</td>
-          <td style="text-align: center;">{{row.channel}}</td>
+          <td style="text-align: center;"><a target="_blank" [href]="row.channel">{{row.channel}}</a></td>
           <td style="text-align: center;">{{row.create_date | amFromUnix | amDateFormat: 'DD-MM-YYYY HH:mm'}}</td>
           <td style="text-align: center;">{{row.count_success || 0}} / {{row.count_fail || 0}}</td>
           <td class="capitalize" style="text-align: center;">{{row.status }}</td>

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ReportService} from './report-manage.service';
 import 'rxjs-compat/add/operator/debounceTime';
 import {StrategyService} from '../strategy/strategy.service';
@@ -135,8 +135,15 @@ export class ReportManageComponent implements OnInit {
               <mat-hint>Ví dụ: Report Pro</mat-hint>
             </mat-form-field>
             <mat-form-field>
-              <mat-select placeholder="Chiến dịch" *ngFor="let item of strategy" formControlName="strategy">
-                <mat-option [value]="item._id">{{item.name}}</mat-option>
+              <mat-select placeholder="Trạng thái" formControlName="status">
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="Suspended">Suspended</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Chiến dịch" formControlName="strategy">
+                <mat-option [value]="item._id" *ngFor="let item of strategyData">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -157,7 +164,8 @@ export class ReportManageComponent implements OnInit {
 
 export class CreateEditReportComponent implements OnInit {
   form: FormGroup;
-  strategy: any;
+  strategyData: any;
+  strategy: AbstractControl;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -170,7 +178,7 @@ export class CreateEditReportComponent implements OnInit {
   ngOnInit() {
     this.strategyService.getAll().subscribe((res: any) => {
       if (res.status) {
-        this.strategy = res.data;
+        this.strategyData = res.data;
       }
     });
     if (this.data.hasOwnProperty('name')) {
@@ -178,15 +186,19 @@ export class CreateEditReportComponent implements OnInit {
         _id: [this.data._id],
         channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
         name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        strategy: [this.data.strategy, Validators.compose([Validators.required])],
+        strategy: [this.data.strategy._id, Validators.compose([Validators.required])],
+        status: [this.data.status, Validators.compose([Validators.required])],
       });
     } else {
       this.form = this.fb.group({
         channel: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
         name: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
         strategy: ['', Validators.compose([Validators.required])],
+        status: ['active', Validators.compose([Validators.required])],
       });
     }
+
+    this.strategy = this.form.controls['strategy'];
   }
 
   close(results) {
