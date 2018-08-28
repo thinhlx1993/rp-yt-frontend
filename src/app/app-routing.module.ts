@@ -4,6 +4,8 @@ import { LayoutComponent } from './core/layout/layout.component';
 import { AuthActivateGruard } from './auth-service.guard';
 import { ActivateServiceGuard } from './app-activate.guard';
 import {StrategyModule} from './main/strategy/strategy.module';
+import {ViewsManageModule} from './main/views-manage/views-manage.module';
+import {UserAgentModule} from './main/useragent/useragent.module';
 
 const routes: Routes = [
   {
@@ -36,6 +38,14 @@ const routes: Routes = [
       {
         path: 'strategy',
         loadChildren: 'app/main/strategy/strategy.module#StrategyModule',
+      },
+      {
+        path: 'views',
+        loadChildren: 'app/main/views-manage/views-manage.module#ViewsManageModule',
+      },
+      {
+        path: 'agents',
+        loadChildren: 'app/main/useragent/useragent.module#UserAgentModule',
       },
     ]
   }

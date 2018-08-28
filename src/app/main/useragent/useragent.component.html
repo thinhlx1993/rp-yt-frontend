@@ -1,0 +1,52 @@
+<fury-scrollbar furyPage furyPagePadding>
+  <div fxLayout="row" [fxLayoutGap]="gap">
+    <div fxFlex="70" fxFlex.md="60" fxHide.lt-md fxLayout="row" [fxLayoutGap]="gap">
+      <button mat-raised-button color="accent" (click)="create()">Tạo mục mới</button>
+    </div>
+    <div fxFlex="30" fxFlex.md="40" fxFlex.lt-md="100" fxLayout="row" [fxLayoutGap]="gap">
+      <div class="search-wrapper" fxFlex>
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="search"
+               autocomplete="off"
+               spellcheck="false"
+               (click)="clearData()"
+               (submit)="getData()"
+               [formControl]="search"
+               class="search-input"
+               placeholder="Tìm kiếm tên">
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1em; margin-bottom: 1em;" fxLayout="row" [fxLayoutGap]="gap">
+    <div class="table-container" furyScrollbar fxFlex="grow">
+      <table class="table" [class.table-hover]="tableHover" [class.table-striped]="tableStriped"
+             [class.table-condensed]="tableCondensed" [class.table-bordered]="tableBordered">
+        <thead>
+        <tr>
+          <th style="text-align: left; width: 10%;">#</th>
+          <th style="text-align: left; width: 50%;">Giá trị</th>
+          <th style="text-align: center; width: 20%;">Ngày tạo</th>
+          <th style="text-align: center; width: 20%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of rows; let i = index;">
+          <td style="text-align: left;">{{(pageIndex * pageSize) + (i + 1)}}</td>
+          <td style="text-align: left;">{{row.name}}</td>
+          <td style="text-align: center;">{{row.create_date | amFromUnix | amDateFormat: 'DD-MM-YYYY HH:mm'}}</td>
+          <td style="text-align: center;">
+            <mat-icon color="accent" style="cursor: pointer;" (click)="openEditDialog(row)">mode_edit</mat-icon>
+            <mat-icon color="warn" style="cursor: pointer;" (click)="openDeleteDialog(row)">delete</mat-icon>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <mat-paginator [length]="totals"
+                     [pageSize]="pageSize"
+                     [pageIndex]="pageIndex"
+                     [pageSizeOptions]="[5, 10, 25, 100]"
+                     (page)="pageSizeChange($event)"></mat-paginator>
+    </div>
+  </div>
+</fury-scrollbar>
