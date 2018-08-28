@@ -1,21 +1,24 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ReportService} from './report-manage.service';
 import 'rxjs-compat/add/operator/debounceTime';
 import {StrategyService} from '../strategy/strategy.service';
+import {TimerObservable} from 'rxjs-compat/observable/TimerObservable';
+import {takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'fury-report-manage',
   templateUrl: './report-manage.component.html',
   styleUrls: ['./report-manage.component.scss']
 })
-export class ReportManageComponent implements OnInit {
+export class ReportManageComponent implements OnInit, OnDestroy {
 
   /**
    * Needed for uploader
    * @param {ManageService} manageService
    */
+  alive: boolean;
   totals = 0;
   uploadPageIndex = 0;
   uploadPageSize = 10;
@@ -34,6 +37,7 @@ export class ReportManageComponent implements OnInit {
   col(colAmount: number) {
     return `1 1 calc(${100 / colAmount}% - ${this._gap - (this._gap / colAmount)}px)`;
   }
+
   constructor(
     private snackBar: MatSnackBar,
     private service: ReportService,
@@ -48,6 +52,15 @@ export class ReportManageComponent implements OnInit {
       this.uploadPageIndex = 0;
       this.getData();
     });
+
+    this.alive = true;
+    TimerObservable.create(0, 10000)
+      .pipe(
+        takeWhile(() => this.alive)
+      )
+      .subscribe(() => {
+        this.getData();
+      });
   }
 
 
@@ -112,6 +125,10 @@ export class ReportManageComponent implements OnInit {
       this.uploadPageIndex = 0;
       this.getData();
     }
+  }
+
+  ngOnDestroy() {
+    this.alive = false;
   }
 }
 
