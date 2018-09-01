@@ -1,15 +1,17 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
 import {ViewsManageService} from './views-manage.service';
 import 'rxjs-compat/add/operator/debounceTime';
+import {takeWhile} from 'rxjs/operators';
+import {TimerObservable} from 'rxjs-compat/observable/TimerObservable';
 
 @Component({
   selector: 'fury-views-manage',
   templateUrl: './views-manage.component.html',
   styleUrls: ['./views-manage.component.scss']
 })
-export class ViewsManageComponent implements OnInit {
+export class ViewsManageComponent implements OnInit, OnDestroy {
   alive: boolean;
   totals = 0;
   pageIndex = 0;
@@ -42,6 +44,15 @@ export class ViewsManageComponent implements OnInit {
       this.pageIndex = 0;
       this.getData();
     });
+
+    this.alive = true;
+    TimerObservable.create(0, 10000)
+      .pipe(
+        takeWhile(() => this.alive)
+      )
+      .subscribe(() => {
+        this.getData();
+      });
   }
 
   pageSizeChange(page?: PageEvent) {
@@ -99,6 +110,10 @@ export class ViewsManageComponent implements OnInit {
       this.pageIndex = 0;
       this.getData();
     }
+  }
+
+  ngOnDestroy() {
+    this.alive = false;
   }
 
 }
