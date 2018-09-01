@@ -1,27 +1,19 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig, PageEvent} from '@angular/material';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ReportService} from './report-manage.service';
+import {ViewsManageService} from './views-manage.service';
 import 'rxjs-compat/add/operator/debounceTime';
-import {StrategyService} from '../strategy/strategy.service';
-import {TimerObservable} from 'rxjs-compat/observable/TimerObservable';
-import {takeWhile} from 'rxjs/operators';
 
 @Component({
-  selector: 'fury-report-manage',
-  templateUrl: './report-manage.component.html',
-  styleUrls: ['./report-manage.component.scss']
+  selector: 'fury-views-manage',
+  templateUrl: './views-manage.component.html',
+  styleUrls: ['./views-manage.component.scss']
 })
-export class ReportManageComponent implements OnInit, OnDestroy {
-
-  /**
-   * Needed for uploader
-   * @param {ManageService} manageService
-   */
+export class ViewsManageComponent implements OnInit {
   alive: boolean;
   totals = 0;
-  uploadPageIndex = 0;
-  uploadPageSize = 10;
+  pageIndex = 0;
+  pageSize = 10;
   rows = [];
   tableHover = false;
   tableStriped = true;
@@ -37,10 +29,8 @@ export class ReportManageComponent implements OnInit, OnDestroy {
   col(colAmount: number) {
     return `1 1 calc(${100 / colAmount}% - ${this._gap - (this._gap / colAmount)}px)`;
   }
-
   constructor(
-    private snackBar: MatSnackBar,
-    private service: ReportService,
+    private service: ViewsManageService,
     private dialog: MatDialog,
   ) { }
 
@@ -49,38 +39,27 @@ export class ReportManageComponent implements OnInit, OnDestroy {
     this.getData();
 
     this.search.valueChanges.debounceTime(500).subscribe((searchText: string) => {
-      this.uploadPageIndex = 0;
+      this.pageIndex = 0;
       this.getData();
     });
-
-    this.alive = true;
-    TimerObservable.create(0, 10000)
-      .pipe(
-        takeWhile(() => this.alive)
-      )
-      .subscribe(() => {
-        this.getData();
-      });
   }
 
-
-
   pageSizeChange(page?: PageEvent) {
-    this.uploadPageIndex = page.pageIndex;
-    this.uploadPageSize = page.pageSize;
+    this.pageIndex = page.pageIndex;
+    this.pageSize = page.pageSize;
     this.getData();
   }
 
   clearData() {
     if (this.search.value !== '') {
       this.search.setValue('');
-      this.uploadPageIndex = 0;
+      this.pageIndex = 0;
       this.getData();
     }
   }
 
   getData() {
-    this.service.get(this.uploadPageIndex, this.uploadPageSize, this.search.value).subscribe((res: any) => {{
+    this.service.get(this.pageIndex, this.pageSize, this.search.value).subscribe((res: any) => {{
       if (res.status) {
         this.rows = res.data.rows;
         this.totals = res.data.totals;
@@ -88,8 +67,8 @@ export class ReportManageComponent implements OnInit, OnDestroy {
     }});
   }
 
-  createEmail() {
-    this.dialog.open(CreateEditReportComponent, {
+  create() {
+    this.dialog.open(CreateEditViewsComponent, {
       disableClose: false,
       data: {}
     }).afterClosed().subscribe(result => {
@@ -98,7 +77,7 @@ export class ReportManageComponent implements OnInit, OnDestroy {
   }
 
   openEditDialog(row) {
-    this.dialog.open(CreateEditReportComponent, {
+    this.dialog.open(CreateEditViewsComponent, {
       disableClose: false,
       data: row || {}
     }).afterClosed().subscribe(result => {
@@ -107,7 +86,7 @@ export class ReportManageComponent implements OnInit, OnDestroy {
   }
 
   openDeleteDialog(row) {
-    this.dialog.open(DeleteChannelComponent, {
+    this.dialog.open(DeleteViewsComponent, {
       disableClose: false,
       data: row
     }).afterClosed().subscribe(result => {
@@ -115,26 +94,18 @@ export class ReportManageComponent implements OnInit, OnDestroy {
     });
   }
 
-  startReport(channel) {
-    this.service.start(channel._id).subscribe((res: any) => {{
-    }});
-  }
-
   refreshData(command) {
     if (command === 'refresh') {
-      this.uploadPageIndex = 0;
+      this.pageIndex = 0;
       this.getData();
     }
   }
 
-  ngOnDestroy() {
-    this.alive = false;
-  }
 }
 
 
 @Component({
-  selector: 'fury-manage-email-dialog',
+  selector: 'fury-manage-views-dialog',
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
       <div>Quản lý kênh</div>
@@ -148,19 +119,12 @@ export class ReportManageComponent implements OnInit, OnDestroy {
         <div class="login-content" fxLayout="column" fxLayoutAlign="start stretch">
           <div fxLayout="row" fxLayoutGap="1em">
             <mat-form-field>
-              <input matInput type="text" placeholder="Tên kênh" formControlName="name" required>
-              <mat-hint>Ví dụ: Report Pro</mat-hint>
+              <input matInput type="text" placeholder="Từ khóa" formControlName="keyword" required>
             </mat-form-field>
             <mat-form-field>
               <mat-select placeholder="Trạng thái" formControlName="status">
-                <mat-option value="active">Active</mat-option>
-                <mat-option value="Suspended">Suspended</mat-option>
-                <mat-option value="inactive">Inactive</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-select placeholder="Chiến dịch" formControlName="strategy">
-                <mat-option [value]="item._id" *ngFor="let item of strategyData">{{item.name}}</mat-option>
+                <mat-option value="active">Hoạt động</mat-option>
+                <mat-option value="inactive">Tạm dừng</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -179,43 +143,31 @@ export class ReportManageComponent implements OnInit, OnDestroy {
 })
 
 
-export class CreateEditReportComponent implements OnInit {
+export class CreateEditViewsComponent implements OnInit {
   form: FormGroup;
-  strategyData: any;
-  strategy: AbstractControl;
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<CreateEditReportComponent>,
-    private service: ReportService,
-    private strategyService: StrategyService,
+    private dialogRef: MatDialogRef<CreateEditViewsComponent>,
+    private service: ViewsManageService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
-    this.strategyService.getAll().subscribe((res: any) => {
-      if (res.status) {
-        this.strategyData = res.data;
-      }
-    });
-    if (this.data.hasOwnProperty('name')) {
+    if (this.data.hasOwnProperty('keyword')) {
       this.form = this.fb.group({
         _id: [this.data._id],
+        keyword: [this.data.keyword, Validators.compose([Validators.required, Validators.maxLength(200)])],
         channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        strategy: [this.data.strategy._id, Validators.compose([Validators.required])],
         status: [this.data.status, Validators.compose([Validators.required])],
       });
     } else {
       this.form = this.fb.group({
         channel: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
-        name: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
-        strategy: ['', Validators.compose([Validators.required])],
+        keyword: ['', Validators.compose([Validators.required, Validators.maxLength(200)])],
         status: ['active', Validators.compose([Validators.required])],
       });
     }
-
-    this.strategy = this.form.controls['strategy'];
   }
 
   close(results) {
@@ -223,7 +175,7 @@ export class CreateEditReportComponent implements OnInit {
   }
 
   save() {
-    if (this.data.hasOwnProperty('name')) {
+    if (this.data.hasOwnProperty('keyword')) {
       // edit
       this.service.edit(this.form.value).subscribe((res: any) => {
         this.showMessage(res);
@@ -256,7 +208,7 @@ export class CreateEditReportComponent implements OnInit {
 }
 
 @Component({
-  selector: 'fury-delete-strategy-dialog',
+  selector: 'fury-delete-views-dialog',
   template: `
     <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
       <div>Xóa kênh</div>
@@ -275,10 +227,10 @@ export class CreateEditReportComponent implements OnInit {
     </mat-dialog-actions>
   `
 })
-export class DeleteChannelComponent {
+export class DeleteViewsComponent {
   constructor(
-    private dialogRef: MatDialogRef<DeleteChannelComponent>,
-    private service: ReportService,
+    private dialogRef: MatDialogRef<DeleteViewsComponent>,
+    private service: ViewsManageService,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -300,4 +252,3 @@ export class DeleteChannelComponent {
     });
   }
 }
-

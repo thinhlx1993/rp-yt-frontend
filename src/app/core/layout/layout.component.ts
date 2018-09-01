@@ -49,17 +49,31 @@ export class LayoutComponent implements OnInit {
         }
 
         menu.push({
-          name: 'Danh sách các kênh',
+          name: 'Kênh report',
           routeOrFunction: '/report',
           icon: 'playlist_add',
           position: 4,
         });
 
         menu.push({
-          name: 'Chiến dịch',
+          name: 'Chiến dịch report',
           routeOrFunction: '/strategy',
           icon: 'chrome_reader_mode',
           position: 5,
+        });
+
+        menu.push({
+          name: 'kênh cày view',
+          routeOrFunction: '/views',
+          icon: 'ondemand_video',
+          position: 6,
+        });
+
+        menu.push({
+          name: 'Danh sách user agent',
+          routeOrFunction: '/agents',
+          icon: 'language',
+          position: 7,
         });
 
         // Send all created Items to SidenavService

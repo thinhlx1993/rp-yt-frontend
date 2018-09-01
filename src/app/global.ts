@@ -10,3 +10,5 @@ export const usersApi = host + '/api/v1/user';
 export const userInfoApi = host + '/api/v1/user/info';
 export const strategysApi = host + '/api/v1/strategy';
 export const channelApi = host + '/api/v1/channel';
+export const userAgentApi = host + '/api/v1/agents';
+export const viewsChannelApi = host + '/api/v1/views';
