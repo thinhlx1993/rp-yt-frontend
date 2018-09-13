@@ -227,9 +227,14 @@ export class EmailComponent implements OnInit {
           <mat-form-field>
             <input matInput type="text" placeholder="Email" formControlName="email" required>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput type="text" placeholder="Mail khôi phục" formControlName="recovery_email" required>
-          </mat-form-field>
+          <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-md="column">
+            <mat-form-field>
+              <input matInput type="text" placeholder="Mail khôi phục" formControlName="recovery_email" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="text" placeholder="Số điện thoại" formControlName="phone" required>
+            </mat-form-field>
+          </div>
           <div fxLayout="row" fxLayoutGap="1em" fxLayout.lt-md="column">
             <mat-form-field>
               <input matInput type="text" placeholder="Mật khẩu" formControlName="password" required>
@@ -266,7 +271,8 @@ export class CreateEditEmailComponent implements OnInit {
         email: ['', Validators.compose([Validators.required, Validators.maxLength(200), Validators.email]) ],
         password: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
         recovery_email: ['', Validators.compose([Validators.required, Validators.maxLength(200), Validators.email])],
-        date: ['', Validators.maxLength(200)]
+        date: ['', Validators.maxLength(200)],
+        phone: ['', Validators.maxLength(200)]
       });
     } else {
       this.form = this.fb.group({
@@ -274,7 +280,8 @@ export class CreateEditEmailComponent implements OnInit {
         email: [this.data.email, Validators.compose([Validators.required, Validators.maxLength(200), Validators.email]) ],
         password: [this.data.password, Validators.compose([Validators.maxLength(200), Validators.required])],
         recovery_email: [this.data.recovery_email, Validators.compose([Validators.required, Validators.maxLength(200), Validators.email])],
-        date: [this.data.date, Validators.maxLength(200)]
+        date: [this.data.date, Validators.maxLength(200)],
+        phone: [this.data.phone, Validators.maxLength(200)]
       });
     }
   }
