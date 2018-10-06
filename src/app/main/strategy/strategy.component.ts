@@ -162,7 +162,7 @@ export class CreateEditStrategyComponent implements OnInit {
   ngOnInit() {
     if (this.data.hasOwnProperty('name')) {
       this.form = this.fb.group({
-        _id: [this.data._id],
+        id: [this.data.id],
         name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)]) ],
         issue: [this.data.issue, Validators.compose([Validators.required, Validators.maxLength(200)]) ],
         sub_issue: [this.data.sub_issue, Validators.compose([Validators.maxLength(200), Validators.required])],
@@ -249,7 +249,7 @@ export class DeleteStrategyComponent {
   }
 
   deleteFile() {
-    this.service.remove(this.data._id).subscribe((res: any) => {
+    this.service.remove(this.data.id).subscribe((res: any) => {
       if (res.status) {
         const snackBarConfig: MatSnackBarConfig = <MatSnackBarConfig>{
           duration: 10000,

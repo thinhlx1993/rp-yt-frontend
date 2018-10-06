@@ -200,11 +200,11 @@ export class CreateEditUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.data.hasOwnProperty('_id')) {
+    if (this.data.hasOwnProperty('id')) {
       this.title = 'Chỉnh sửa thông tin cá nhân.';
       this.state = 'editUser';
       this.form = this.fb.group({
-        _id: [this.data._id],
+        id: [this.data.id],
         username: [this.data.username, Validators.compose([Validators.maxLength(200), Validators.required])],
         fullname: [this.data.fullname, Validators.maxLength(200)],
         phone: [this.data.phone, Validators.maxLength(200)],
@@ -231,7 +231,7 @@ export class CreateEditUserComponent implements OnInit {
   }
 
   save() {
-    if (this.data.hasOwnProperty('_id')) {
+    if (this.data.hasOwnProperty('id')) {
       // edit user
       this.userService.editUser(this.form.value).subscribe((res: any) => {
         this.showMessage(res);
@@ -304,7 +304,7 @@ export class DeleteUserComponent {
   }
 
   deleteFile() {
-    this.userService.removeUser(this.data._id).subscribe((res: any) => {
+    this.userService.removeUser(this.data.id).subscribe((res: any) => {
       if (res.status) {
         const snackBarConfig: MatSnackBarConfig = <MatSnackBarConfig>{
           duration: 10000,
@@ -370,9 +370,9 @@ export class ChangePasswordUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.data.hasOwnProperty('_id')) {
+    if (this.data.hasOwnProperty('id')) {
       this.form = this.fb.group({
-        _id: [this.data._id],
+        id: [this.data.id],
         username: [this.data.username],
         password: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
         confirm: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
@@ -386,11 +386,11 @@ export class ChangePasswordUserComponent implements OnInit {
   }
 
   save() {
-    if (this.data.hasOwnProperty('_id')) {
+    if (this.data.hasOwnProperty('id')) {
       if (this.form.controls['password'].value === this.form.controls['confirm'].value) {
         // edit user
         const json = {
-          _id: this.data._id,
+          id: this.data.id,
           password: this.form.controls['password'].value
         };
 

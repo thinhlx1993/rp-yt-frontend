@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {usersApi} from '../../global';
+import {usersApi, usersPasswordApi} from '../../global';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class UsersService {
   }
 
   changePasswordUser(data): Observable<any> {
-    return this.http.put(usersApi, data);
+    return this.http.put(usersPasswordApi, data);
   }
 
   removeUser(_id): Observable<any> {

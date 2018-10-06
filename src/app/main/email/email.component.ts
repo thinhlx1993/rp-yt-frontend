@@ -266,7 +266,7 @@ export class CreateEditEmailComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.data === {}) {
+    if (!this.data.hasOwnProperty('id')) {
       this.form = this.fb.group({
         email: ['', Validators.compose([Validators.required, Validators.maxLength(200), Validators.email]) ],
         password: ['', Validators.compose([Validators.maxLength(200), Validators.required])],
@@ -276,7 +276,7 @@ export class CreateEditEmailComponent implements OnInit {
       });
     } else {
       this.form = this.fb.group({
-        _id: [this.data._id],
+        id: [this.data.id],
         email: [this.data.email, Validators.compose([Validators.required, Validators.maxLength(200), Validators.email]) ],
         password: [this.data.password, Validators.compose([Validators.maxLength(200), Validators.required])],
         recovery_email: [this.data.recovery_email, Validators.compose([Validators.required, Validators.maxLength(200), Validators.email])],
@@ -291,7 +291,7 @@ export class CreateEditEmailComponent implements OnInit {
   }
 
   save() {
-    if (this.data === {}) {
+    if (!this.data.hasOwnProperty('id')) {
       // create email
       this.emailService.createEmail(this.form.value).subscribe((res: any) => {
         this.showMessage(res);
@@ -357,7 +357,7 @@ export class DeleteEmailComponent {
   }
 
   deleteFile() {
-    this.emailService.removeEmail(this.data._id).subscribe((res: any) => {
+    this.emailService.removeEmail(this.data.id).subscribe((res: any) => {
       if (res.status) {
         const snackBarConfig: MatSnackBarConfig = <MatSnackBarConfig>{
           duration: 10000,
