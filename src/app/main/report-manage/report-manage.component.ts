@@ -53,14 +53,14 @@ export class ReportManageComponent implements OnInit, OnDestroy {
       this.getData();
     });
 
-    this.alive = true;
-    TimerObservable.create(0, 10000)
-      .pipe(
-        takeWhile(() => this.alive)
-      )
-      .subscribe(() => {
-        this.getData();
-      });
+    // this.alive = true;
+    // TimerObservable.create(0, 10000)
+    //   .pipe(
+    //     takeWhile(() => this.alive)
+    //   )
+    //   .subscribe(() => {
+    //     this.getData();
+    //   });
   }
 
 
@@ -160,7 +160,7 @@ export class ReportManageComponent implements OnInit, OnDestroy {
             </mat-form-field>
             <mat-form-field>
               <mat-select placeholder="Chiến dịch" formControlName="strategy">
-                <mat-option [value]="item._id" *ngFor="let item of strategyData">{{item.name}}</mat-option>
+                <mat-option [value]="item.id" *ngFor="let item of strategyData">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -200,10 +200,10 @@ export class CreateEditReportComponent implements OnInit {
     });
     if (this.data.hasOwnProperty('name')) {
       this.form = this.fb.group({
-        _id: [this.data._id],
+        _id: [this.data.id],
         channel: [this.data.channel, Validators.compose([Validators.required, Validators.maxLength(200)])],
         name: [this.data.name, Validators.compose([Validators.required, Validators.maxLength(200)])],
-        strategy: [this.data.strategy._id, Validators.compose([Validators.required])],
+        strategy: [this.data.strategy, Validators.compose([Validators.required])],
         status: [this.data.status, Validators.compose([Validators.required])],
       });
     } else {

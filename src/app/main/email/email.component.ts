@@ -340,7 +340,7 @@ export class CreateEditEmailComponent implements OnInit {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="close('do nothing')">Không</button>
-      <button mat-raised-button color="warn" (click)="deleteFile()">Đồng ý xóa</button>
+      <button mat-raised-button color="warn" (submit)="deleteFile()" (click)="deleteFile()">Đồng ý xóa</button>
     </mat-dialog-actions>
   `
 })
